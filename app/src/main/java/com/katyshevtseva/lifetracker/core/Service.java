@@ -1,15 +1,18 @@
 package com.katyshevtseva.lifetracker.core;
 
-import static com.katyshevtseva.lifetracker.utils.Utils.READABLE_DATE_FORMAT;
-import static com.katyshevtseva.lifetracker.utils.Utils.READABLE_DATE_TIME_FORMAT;
-import static com.katyshevtseva.lifetracker.utils.Utils.READABLE_TIME_FORMAT;
-import static com.katyshevtseva.lifetracker.utils.Utils.equalsIgnoreTime;
-import static com.katyshevtseva.lifetracker.utils.Utils.isEmpty;
+import static com.katyshevtseva.lifetracker.core.utils.TimeUtils.after;
+import static com.katyshevtseva.lifetracker.core.utils.TimeUtils.getTime;
+import static com.katyshevtseva.lifetracker.core.utils.TimeUtils.setTime;
+import static com.katyshevtseva.lifetracker.core.utils.Utils.READABLE_DATE_FORMAT;
+import static com.katyshevtseva.lifetracker.core.utils.Utils.READABLE_TIME_FORMAT;
+import static com.katyshevtseva.lifetracker.core.utils.Utils.addDays;
+import static com.katyshevtseva.lifetracker.core.utils.Utils.equalsIgnoreTime;
+import static com.katyshevtseva.lifetracker.core.utils.Utils.isEmpty;
 
 import com.katyshevtseva.lifetracker.core.entity.Activity;
 import com.katyshevtseva.lifetracker.core.entity.Entry;
+import com.katyshevtseva.lifetracker.core.utils.Time;
 import com.katyshevtseva.lifetracker.db.DlDao;
-import com.katyshevtseva.lifetracker.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -33,9 +36,13 @@ public class Service {
         return dao.getAllActivities();
     }
 
+    public void undoLastEntry() {
+//        System.currentTimeMillis(); //todo
+    }
+
     public List<String> getEntries() {
         List<Entry> entries = dao.getAllEntiries().stream()
-                .sorted(Comparator.comparing(Entry::getId)).collect(Collectors.toList());
+                .sorted(Comparator.comparing(Entry::getBegin)).collect(Collectors.toList());
         List<String> result = new ArrayList<>();
 
         if (entries.isEmpty()) {
@@ -44,11 +51,11 @@ public class Service {
 
         Date currentDate = null;
         for (Entry entry : entries) {
-            if (currentDate == null || !Utils.equalsIgnoreTime(entry.getBegin(), currentDate)) {
+            if (currentDate == null || !equalsIgnoreTime(entry.getBegin(), currentDate)) {
                 currentDate = entry.getBegin();
-                result.add(READABLE_DATE_FORMAT.format(currentDate));
+                result.add(" *** " + READABLE_DATE_FORMAT.format(currentDate) + " *** ");
             }
-            result.add(READABLE_DATE_TIME_FORMAT.format(entry.getBegin())
+            result.add(READABLE_TIME_FORMAT.format(entry.getBegin())
                     + " " + dao.getActivityById(entry.getActivityId()).getTitle());
         }
 
@@ -79,7 +86,7 @@ public class Service {
         String time;
         if (equalsIgnoreTime(entry.getBegin(), new Date())) {
             time = "at " + READABLE_TIME_FORMAT.format(entry.getBegin());
-        } else if (equalsIgnoreTime(entry.getBegin(), Utils.addDays(new Date(), -1))) {
+        } else if (equalsIgnoreTime(entry.getBegin(), addDays(new Date(), -1))) {
             time = "yesterday at " + READABLE_TIME_FORMAT.format(entry.getBegin());
         } else {
             time = READABLE_DATE_FORMAT.format(entry.getBegin()) + " at " + READABLE_TIME_FORMAT.format(entry.getBegin());
@@ -88,10 +95,18 @@ public class Service {
         return activity.getTitle() + " was started " + time;
     }
 
-    public void startActivity(Activity activity) {
+    public void startActivity(Activity activity, Time time) {
         Entry entry = new Entry();
         entry.setActivityId(activity.getId());
-        entry.setBegin(new Date());
+        Date date = time == null ? new Date() : changeDatesTime(new Date(), time);
+        entry.setBegin(date);
         dao.saveNew(entry);
+    }
+
+    private Date changeDatesTime(Date date, Time time) {
+        if (after(time, getTime(date))) {
+            date = addDays(date, -1);
+        }
+        return setTime(date, time);
     }
 }

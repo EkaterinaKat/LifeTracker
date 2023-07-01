@@ -1,4 +1,4 @@
-package com.katyshevtseva.lifetracker.utils;
+package com.katyshevtseva.lifetracker.view;
 
 import android.text.Editable;
 import android.text.TextWatcher;

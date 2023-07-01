@@ -19,6 +19,7 @@ import com.katyshevtseva.lifetracker.db.DlDao;
 public class MainActivity extends AppCompatActivity {
     private TextView currentStateLabel;
     private GridLayout activityContainer;
+    private MyTimePicker timePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), ActivityActivity.class)));
         findViewById(R.id.entry_button).setOnClickListener(view ->
                 startActivity(new Intent(getApplicationContext(), EntryActivity.class)));
+        findViewById(R.id.clear_time_button).setOnClickListener(view ->
+                timePicker.setTime(null));
+
+        timePicker = new MyTimePicker(findViewById(R.id.begin_time_view), this,
+                null, null, null);
     }
 
     @Override
@@ -65,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     private View.OnClickListener getActivityClickListener(Activity activity) {
         return new View.OnClickListener() {
-            private static final int TIME_INTERVAL = 2000;
+            private static final int TIME_INTERVAL = 1000;
             private long prevClickTime;
 
             @Override
@@ -80,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onActivityClick(Activity activity) {
-        Service.INSTANCE.startActivity(activity);
+        Service.INSTANCE.startActivity(activity, timePicker.getTime());
+        timePicker.setTime(null);
         fillCurrentStateLabel();
     }
 }

@@ -1,4 +1,4 @@
-package com.katyshevtseva.lifetracker.utils;
+package com.katyshevtseva.lifetracker.core.utils;
 
 import java.text.DateFormat;
 import java.text.ParseException;

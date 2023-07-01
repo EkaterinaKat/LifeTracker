@@ -1,14 +1,13 @@
 package com.katyshevtseva.lifetracker.db;
 
-
 import static com.katyshevtseva.lifetracker.db.DbConstants.DATE_FORMAT;
 import static com.katyshevtseva.lifetracker.db.DbConstants.DATE_TIME_FORMAT;
 
 import android.util.Log;
 
-import com.katyshevtseva.lifetracker.utils.OneInOneOutKnob;
-import com.katyshevtseva.lifetracker.utils.OneOutKnob;
-import com.katyshevtseva.lifetracker.utils.TwoInKnob;
+import com.katyshevtseva.lifetracker.core.utils.OneInOneOutKnob;
+import com.katyshevtseva.lifetracker.core.utils.OneOutKnob;
+import com.katyshevtseva.lifetracker.core.utils.TwoInKnob;
 
 import java.text.ParseException;
 import java.util.ArrayList;

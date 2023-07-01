@@ -1,4 +1,4 @@
-package com.katyshevtseva.lifetracker.utils;
+package com.katyshevtseva.lifetracker.core.utils;
 
 @FunctionalInterface
 public interface TwoInKnob<P1, P2> {

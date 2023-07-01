@@ -14,8 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import com.katyshevtseva.lifetracker.R;
 import com.katyshevtseva.lifetracker.core.Service;
 import com.katyshevtseva.lifetracker.core.entity.Activity;
-import com.katyshevtseva.lifetracker.utils.NoArgKnob;
-import com.katyshevtseva.lifetracker.utils.ViewUtils;
+import com.katyshevtseva.lifetracker.core.utils.NoArgKnob;
 
 public class ActivityEditDialog extends DialogFragment {
     private final Activity existing;
