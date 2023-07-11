@@ -49,19 +49,21 @@ abstract class AbstractDao<T extends Entity> {
         return null;
     }
 
-    List<T> find(String columnName, String value) {
-        return find(new String[]{columnName}, new String[]{value});
-    }
-
-    List<T> find(String[] columnNames, String[] values) {
-        StringBuilder selection = new StringBuilder(columnNames[0]).append(" = ?");
-        for (int i = 1; i < columnNames.length; i++) {
-            selection.append(" and ").append(columnNames[i]).append(" = ?");
+    List<T> find(String[] columnNames, String[] values, String orderBy, String limit) {
+        String selection = null;
+        if (columnNames != null) {
+            StringBuilder selectionBuilder = new StringBuilder(columnNames[0]).append(" = ?");
+            for (int i = 1; i < columnNames.length; i++) {
+                selectionBuilder.append(" and ").append(columnNames[i]).append(" = ?");
+            }
+            selection = selectionBuilder.toString();
+        } else {
+            values = null;
         }
 
         List<T> result = new ArrayList<>();
-        Cursor cursor = database.query(table.getName(), null, selection.toString(),
-                values, null, null, null, null);
+        Cursor cursor = database.query(table.getName(), null, selection,
+                values, null, null, orderBy, limit);
 
         try (KomCursorWrapper cursorWrapper = new KomCursorWrapper(cursor)) {
             cursorWrapper.moveToFirst();

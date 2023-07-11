@@ -37,12 +37,11 @@ public class Service {
     }
 
     public void undoLastEntry() {
-//        System.currentTimeMillis(); //todo
+        dao.delete(dao.findLatestEntry());
     }
 
     public List<String> getEntries() {
-        List<Entry> entries = dao.getAllEntiries().stream()
-                .sorted(Comparator.comparing(Entry::getBegin)).collect(Collectors.toList());
+        List<Entry> entries = dao.getAllEntriesOrderByDate();
         List<String> result = new ArrayList<>();
 
         if (entries.isEmpty()) {

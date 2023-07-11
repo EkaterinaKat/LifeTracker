@@ -1,5 +1,6 @@
 package com.katyshevtseva.lifetracker.db;
 
+import static com.katyshevtseva.lifetracker.db.DbConstants.BEGIN_TIME;
 import static com.katyshevtseva.lifetracker.db.DbConstants.ID;
 
 import android.content.Context;
@@ -48,11 +49,20 @@ public class DlDao {
         entryDao.saveNew(entry);
     }
 
-    public List<Entry> getAllEntiries() {
+    public List<Entry> getAllEntries() {
         return entryDao.findAll();
     }
 
+    public void delete(Entry entry) {
+        entryDao.delete(entry);
+    }
+
+    public List<Entry> getAllEntriesOrderByDate() {
+        return entryDao.find(null, null, BEGIN_TIME, null);
+    }
+
     public Entry findLatestEntry() {
-        return entryDao.findLastAdded();
+        List<Entry> entries = entryDao.find(null, null, BEGIN_TIME + " DESC ", "1");
+        return entries.isEmpty() ? null : entries.get(0);
     }
 }
