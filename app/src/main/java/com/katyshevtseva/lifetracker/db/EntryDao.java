@@ -1,9 +1,10 @@
 package com.katyshevtseva.lifetracker.db;
 
+import static com.katyshevtseva.lifetracker.core.utils.Utils.getDateByUnixTime;
+import static com.katyshevtseva.lifetracker.core.utils.Utils.getUnixTimeByDate;
 import static com.katyshevtseva.lifetracker.db.DbConstants.ACTIVITY_ID;
-import static com.katyshevtseva.lifetracker.db.DbConstants.BEGIN;
+import static com.katyshevtseva.lifetracker.db.DbConstants.BEGIN_TIME;
 import static com.katyshevtseva.lifetracker.db.DbConstants.ID;
-import static com.katyshevtseva.lifetracker.db.DbTable.ColumnActualType.DATE_TIME;
 import static com.katyshevtseva.lifetracker.db.DbTable.ColumnActualType.LONG;
 
 import android.database.sqlite.SQLiteDatabase;
@@ -11,7 +12,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.katyshevtseva.lifetracker.core.entity.Entry;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class EntryDao extends AbstractDao<Entry> {
@@ -32,8 +32,9 @@ public class EntryDao extends AbstractDao<Entry> {
         columns.add(new DbTable.Column<>(ACTIVITY_ID, LONG, Entry::getActivityId,
                 (entry, o) -> entry.setActivityId(((Long) o))));
 
-        columns.add(new DbTable.Column<>(BEGIN, DATE_TIME,
-                Entry::getBegin, (entry, o) -> entry.setBegin((Date) o)));
+        columns.add(new DbTable.Column<>(BEGIN_TIME, LONG,
+                entry -> getUnixTimeByDate(entry.getBegin()),
+                (entry, o) -> entry.setBegin(getDateByUnixTime((long) o))));
 
         return columns;
     }

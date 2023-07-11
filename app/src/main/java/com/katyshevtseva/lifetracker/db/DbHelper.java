@@ -1,7 +1,7 @@
 package com.katyshevtseva.lifetracker.db;
 
 import static com.katyshevtseva.lifetracker.db.DbConstants.ACTIVITY_ID;
-import static com.katyshevtseva.lifetracker.db.DbConstants.BEGIN;
+import static com.katyshevtseva.lifetracker.db.DbConstants.BEGIN_TIME;
 import static com.katyshevtseva.lifetracker.db.DbConstants.ID;
 import static com.katyshevtseva.lifetracker.db.DbConstants.TITLE;
 
@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbHelper extends SQLiteOpenHelper {
-    private static final int VERSION = 1;
+    private static final int VERSION = 3;
     private static final String DATABASE_NAME = "lt.db";
 
     DbHelper(Context context) {
@@ -25,7 +25,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         database.execSQL("create table " + EntryDao.NAME + "(" +
                 ID + " INTEGER primary key autoincrement, " +
-                BEGIN + " TEXT, " +
+                BEGIN_TIME + " INTEGER, " +
                 ACTIVITY_ID + " INTEGER )");
     }
 

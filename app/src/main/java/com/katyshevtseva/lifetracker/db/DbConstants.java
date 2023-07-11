@@ -10,5 +10,5 @@ class DbConstants {
     static final String ID = "id";
     static final String TITLE = "title";
     static final String ACTIVITY_ID = "activity_id";
-    static final String BEGIN = "begin";
+    static final String BEGIN_TIME = "begin_time";
 }

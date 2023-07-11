@@ -33,4 +33,12 @@ public abstract class Utils {
         calendar.add(Calendar.DATE, numOfDays);
         return calendar.getTime();
     }
+
+    public static long getUnixTimeByDate(Date date) {
+        return date.getTime() / 1000;
+    }
+
+    public static Date getDateByUnixTime(long time) {
+        return new Date(time * 1000);
+    }
 }
